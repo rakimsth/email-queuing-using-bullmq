@@ -22,13 +22,16 @@ exports.create = async (req, res) => {
 exports.sendEmailToUsers = async (req, res) => {
   try {
     const users = await User.find();
-    users.forEach(async (user, index) => {
-      await addEmailToQueue(user).then(() => {
-        if (index + 1 === users.length) {
-          res.json({ msg: "All users added to the queue." });
-        }
+    console.log({ users: users.length });
+    if (users.length === 0) res.json({ msg: "No Users found..." });
+    users.length > 0 &&
+      users.forEach(async (user, index) => {
+        await addEmailToQueue(user).then(() => {
+          if (index + 1 === users.length) {
+            res.json({ msg: "All users added to the queue." });
+          }
+        });
       });
-    });
   } catch (error) {
     console.log(error);
     res.status(400).json(error);
