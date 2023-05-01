@@ -6,7 +6,6 @@ services:
       - MONGODB_URL=mongodb://mongodb/queuing
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_URL=redis://redis:6379
     build:
       context: .
       dockerfile: Dockerfile
