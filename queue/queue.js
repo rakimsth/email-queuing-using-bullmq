@@ -2,8 +2,6 @@ const Redis = require("ioredis");
 const { Queue } = require("bullmq");
 const { connection } = require("./connection");
 
-console.log({ redis: process.env.REDIS_URL });
-
 const emailQueue = new Queue("emailQueue", {
   connection: new Redis(connection),
 });
