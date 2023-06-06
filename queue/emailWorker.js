@@ -1,9 +1,11 @@
 const Redis = require("ioredis");
 const { Worker, QueueEvents } = require("bullmq");
-const { connection } = require("./connection");
+const { redis } = require("./connection");
 const sendEmailCreationEmail = require("../mail/sendAccountCreationEmail");
 
-const emailQueueEvents = new QueueEvents("emailQueue");
+const emailQueueEvents = new QueueEvents("emailQueue", {
+  connection: redis.duplicate(),
+});
 
 const emailWorker = new Worker(
   "emailQueue",
@@ -16,7 +18,7 @@ const emailWorker = new Worker(
     }
   },
   {
-    connection: new Redis(connection),
+    connection: redis.duplicate(),
   }
 );
 

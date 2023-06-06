@@ -1,9 +1,12 @@
-const Redis = require("ioredis");
 const { Queue } = require("bullmq");
-const { connection } = require("./connection");
+const { redis } = require("./connection");
 
 const emailQueue = new Queue("emailQueue", {
-  connection: new Redis(connection),
+  connection: redis.duplicate(),
+});
+
+emailQueue.on("error", (err) => {
+  console.log(err.message);
 });
 
 const emailQueueOptions = {

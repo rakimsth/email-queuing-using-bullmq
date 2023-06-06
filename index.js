@@ -3,8 +3,6 @@ const mongoose = require("mongoose");
 const userRoutes = require("./routes/user");
 require("dotenv").config();
 require("./mail/transporter");
-// process the queued jobs
-require("./queue/worker");
 
 const app = express();
 
@@ -18,7 +16,11 @@ app.use("/users", userRoutes);
 
 mongoose
   .connect(process.env.MONGODB_URL)
-  .then((success) => console.log("Mongodb connected successfully..."))
+  .then(() => {
+    console.log("Mongodb connected successfully...");
+    // process the queued jobs after DB Connection
+    require("./queue/worker");
+  })
   .catch((error) => console.log(error));
 
 const PORT = 4000;
